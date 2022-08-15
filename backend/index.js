@@ -1,9 +1,12 @@
 // ***** API DESENVOLVIDA PARA TESTE DE VAGA DE ESTÁGIO/DEV JR. ***** //
 require('dotenv').config()
 const express = require('express')
+const cors = require('cors')
 const mongoose = require('mongoose')
 const app = express()
-
+const allowCors = require ('./cors')
+app.use(allowCors)
+app.use(cors());
 
 const port = process.env.PORT   //declarando qual porta sera usada
 const dbUser = process.env.DBUSERNAME //usuario do db
