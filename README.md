@@ -43,7 +43,7 @@ Inicie o servidor
 Entre no diretório do projeto frontend
 
 ```bash
-  cd ./frontend
+  cd ../frontend
 ```
 
 Instale as dependências
