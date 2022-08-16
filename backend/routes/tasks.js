@@ -9,7 +9,6 @@ router.post('/',async(req, res,next)=>{
         res.status(422).json({error:'bad request'});
     }
 
-    console.log('tipo ==',typeof(date));
     const dbDate = new Date(date);
     const newTask = {title,description,date:dbDate,duration};
     try{
@@ -53,19 +52,20 @@ router.put('/:title', async(req,res) =>{
 
 router.patch('/:title', async(req,res) =>{
     const titles = req.params.title
-    const {done} = req.body
+    const {done,description} = req.body
     
     try{
+        if(done)
+        {
         const updatedTask = {done};
         const num = await task.updateOne({title:titles},updatedTask)
-
-        if(num.modifiedCount !== 1)
+        }
+        else if(description)
         {
-            res.status(422).json({error:'não encontrado'})
+        const updatedTask = {description};
+        const num = await task.updateOne({title:titles},updatedTask)
         }
-        else{
             res.status(200).json({log:'updated'});
-        }
     }catch(err){
         res.status(500).json({error:err})
     }
@@ -87,6 +87,18 @@ router.get('/:title',async(req,res)=>{
     }
     catch(error){
         res.status(500).json({error:error})
+    }
+})
+
+router.post('/like/',async(req,res)=>{
+    const title = req.body.title
+    try{
+        const regex =  new RegExp(title,'i'); // correct way
+        const allWithThisTitle = await task.find( { title: { $regex:regex} } )
+        res.status(200).json(allWithThisTitle);
+    }
+    catch(error){
+        res.status(200).json({})
     }
 })
 

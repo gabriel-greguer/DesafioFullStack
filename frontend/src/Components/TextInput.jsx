@@ -16,10 +16,17 @@ const TextInput = (props) => {
   const [taskDescription,setTaskDescription] = useState('');
   const [taskDate,setTaskDate] = useState('');
 
+  //constrole do modal de inserção
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const valideCreate = async() => {
 
+  //valida a criação e insere
+  const valideCreate = async() => {
+    if(!taskName)
+    {
+      setVerification(true);
+      return;
+    }
     let response = await axios.get(`http://127.0.0.1:3000/task/${taskName}`)
     .then((response)=>{
       setVerification(true)})
@@ -54,7 +61,8 @@ const TextInput = (props) => {
         Nova Tarefa
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose}  backdrop="static"
+        keyboard={false}>
         <Modal.Header closeButton>
           <Modal.Title>Criar Nova Tarefa</Modal.Title>
         </Modal.Header>
@@ -75,7 +83,7 @@ const TextInput = (props) => {
  
 
       <Form.Select onChange={(e) => setTaskDuration(e.target.value)} className='mt-4' aria-label="Floating label select example">
-        <option selected disabled>Duração</option>
+        <option defaultValue disabled>Duração</option>
         <option value="1-hr">1 hora</option>
         <option value="2-hr">2 horas</option>
         <option value="3-hr">3 horas</option>
