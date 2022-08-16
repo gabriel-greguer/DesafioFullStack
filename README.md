@@ -6,11 +6,11 @@ Organizador de Tasks, desafio de full-stack developer.
 
 ## Funcionalidades
 
-- Cadastrar nova task com os atributos nome, descrição, data e hora e tempo de duração
-- Remover tasks já cadastradas
+- Cadastrar nova task com os atributos nome, descrição, data e hora e tempo de duração.
+- Remover tasks já cadastradas.
 - Campo de busca de tarefas por nome.
-- Edição da descrição da tarefa selecionada
-- Integração com banco MongoDB
+- Edição da descrição da tarefa selecionada.
+- Integração com banco MongoDB.
 - Marcar Tarefas como feita(Done) indicadas em verde.
 
 
@@ -45,7 +45,7 @@ Caso tenha erro rodando no linux
 ```bash
   localize o arquivo node_modules/whatwg-url/dist/encoding.js or .../lib/encoding.js
   e adicione a linha a seguir no topo { TextEncoder, TextDecoder } = require("util");
-  de npm start novamente
+  de npm start novamente.
 ```
 
 
