@@ -40,6 +40,15 @@ Inicie o servidor
   npm start
 ```
 
+Caso tenha erro rodando no linux
+
+```bash
+  localize o arquivo node_modules/whatwg-url/dist/encoding.js or .../lib/encoding.js
+  e adicione a linha a seguir no topo { TextEncoder, TextDecoder } = require("util");
+  de npm start novamente
+```
+
+
 Entre no diretório do projeto frontend
 
 ```bash
