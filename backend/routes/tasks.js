@@ -10,8 +10,7 @@ router.post('/',async(req, res,next)=>{
     }
 
     console.log('tipo ==',typeof(date));
-    const [month,day,year] = date.split('/');
-    const dbDate = new Date(+year,+month - 1,+day) ;
+    const dbDate = new Date(date);
     const newTask = {title,description,date:dbDate,duration};
     try{
         await task.create(newTask);
@@ -32,12 +31,58 @@ router.get('/',async(req,res)=>{
     }
 })
 
+router.put('/:title', async(req,res) =>{
+    const titles = req.params.title
+    const {title,description,date,duration} = req.body
+    const dbDate = new Date(date);
+    try{
+        const updatedTask = {title,description,date:dbDate,duration};
+        const num = await task.updateOne({title:titles},updatedTask)
+
+        if(num.modifiedCount !== 1)
+        {
+            res.status(422).json({error:'não encontrado'})
+        }
+        else{
+            res.status(200).json({log:'updated'});
+        }
+    }catch(err){
+        res.status(500).json({error:err})
+    }
+})
+
+router.patch('/:title', async(req,res) =>{
+    const titles = req.params.title
+    const {done} = req.body
+    
+    try{
+        const updatedTask = {done};
+        const num = await task.updateOne({title:titles},updatedTask)
+
+        if(num.modifiedCount !== 1)
+        {
+            res.status(422).json({error:'não encontrado'})
+        }
+        else{
+            res.status(200).json({log:'updated'});
+        }
+    }catch(err){
+        res.status(500).json({error:err})
+    }
+})
+
+
 
 router.get('/:title',async(req,res)=>{
     const title = req.params.title
     
     try{
-        const allWithThisTitle = await task.find({title:title})
+        const allWithThisTitle = await task.findOne({title:title})
+
+        if(allWithThisTitle.size === 0 )
+        {
+            res.status(500).json({error:error})
+        }
         res.status(200).json(allWithThisTitle);
     }
     catch(error){
@@ -63,6 +108,18 @@ router.delete('/:title',async (req,res)=>{
     }catch(err){
         res.status(500).json({error:err});
     }
+})
+
+router.delete('/',async (req,res)=>{
+    try{
+    task.deleteMany({}, ()=>{console.log('all deleted')})
+    res.status(200).json({message:"removido com sucesso"});
+    }
+    catch(err)
+    {
+        res.status(500).json({error:err})
+    }
+    
 })
 
 

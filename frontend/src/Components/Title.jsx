@@ -3,7 +3,7 @@ import style from '../Styles/Title.module.css'
 
 const Title = () => {
   return (
-    <h1 className={style.title}>Organizador de Tasks</h1>
+    <h1 className={style.title}>Organizador de Tarefas</h1>
   )
 }
 

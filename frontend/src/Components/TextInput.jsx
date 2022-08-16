@@ -6,7 +6,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 
-const TextInput = () => {
+const TextInput = (props) => {
   const [show, setShow] = useState(false);
   const [verification,setVerification] = useState(false);
 
@@ -18,23 +18,35 @@ const TextInput = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const valideCreate = () => {
-    if(taskDuration && taskName && taskDescription && taskDate)
-    {
-    console.log('validado');
-    setVerification(false);
-    axios.post('http://127.0.0.1:3000/task',
-    {title:taskName,
-    duration:taskDuration,
-    description:taskDescription,
-    date:taskDate}).then(console.log('sended'))
-    }
-    else
-    {
-      setVerification(true);
-    }
+  const valideCreate = async() => {
 
+    let response = await axios.get(`http://127.0.0.1:3000/task/${taskName}`)
+    .then((response)=>{
+      setVerification(true)})
+      .catch(()=>{
+          if(taskDuration && taskName && taskDescription && taskDate)
+          {
+          setVerification(false);
+          axios.post('http://127.0.0.1:3000/task',
+          {title:taskName,
+          duration:taskDuration,
+          description:taskDescription,
+          date:new Date(taskDate)})
+          .then(()=>{
+            setShow(false);
+            setTaskName('');
+            setTaskDuration('');
+            setTaskDescription('');
+            setTaskDate('');
+            props.fnc();})
+          }
+          else
+          {
+            setVerification(true);
+          }
+        })
   }
+  
 
   return (
     <>
@@ -58,7 +70,7 @@ const TextInput = () => {
           className="mb-4 h-100"
         />
       </FloatingLabel>
-      <input onChange={(e)=>{setTaskDate(e.target.value)}} type="datetime-local" />
+      <input min="2022-08-15T00:00" max="2035-01-01T00:00" onChange={(e)=>{setTaskDate(e.target.value)}} type="datetime-local" />
       <span style={{marginLeft:'20px'}}>data e hora da tarefa.</span>
  
 
@@ -73,7 +85,7 @@ const TextInput = () => {
 
         </Modal.Body>
         <Modal.Footer>
-        {verification && <div>Preencha todos os campos.</div>}
+        {verification && <div>Campos em branco ou já existe uma task com esse nome.</div>}
           <Button variant="secondary" onClick={handleClose}>
             Fechar
           </Button>
